@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Event } from "../types/event";
 import { formatDate } from "@/utils/dateHelper";
+import EventItemDetails from "./EventItemDetails";
 
 export default function EventItem({ event }: { event: Event }) {
   const [openRow, setOpenRow] = useState<boolean>(false);
@@ -41,7 +42,9 @@ export default function EventItem({ event }: { event: Event }) {
       </tr>
       {openRow && (
         <tr>
-          <th colSpan={4}>event details</th>
+          <th colSpan={4}>
+            <EventItemDetails event={event} />
+          </th>
         </tr>
       )}
     </>
