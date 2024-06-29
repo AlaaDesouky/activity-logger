@@ -10,15 +10,16 @@ datasource db {
 model Event {
   id          String   @id @default(cuid())
   object      String
-  actorId     String
+  actorId     String @map(name:"actor_id")
   actor       Actor    @relation(fields: [actorId], references: [id])
-  actionId    String
+  actionId    String @map(name:"action_id")
   action      Action   @relation(fields: [actionId], references: [id])
-  targetId    String
+  targetId    String @map(name:"target_id")
   target      Target   @relation(fields: [targetId], references: [id])
+  group String
   location    String
-  occurredAt  DateTime @default(now())
-  metadata    Json
+  occurredAt  DateTime @default(now()) @map(name: "occurred_at")
+  metadata    Json?
 }
 
 model Actor {
