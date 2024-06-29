@@ -5,59 +5,95 @@ export default function EventItemDetails({ event }: { event: Event }) {
   return (
     <div className="card shadow-xl w-100">
       <div className="card-body">
-        <div className="flex justify-between">
-          <div>
-            {/* Actor */}
-            <h2 className="card-title">ACTOR</h2>
-            <div className="flex items-center justify-between">
-              <span>Name</span>
-              <span>{event.actor_name}</span>
+        <div className="grid grid-cols-3 gap-2">
+          {/* Actor */}
+          <div className="mt-1">
+            <h2 className="font-bold text-gray-500">ACTOR</h2>
+            <div className="flex justify-between mt-2">
+              <span className="font-semibold text-gray-400">Name</span>
+              <span className="font-semibold text-gray-800">
+                {event.actor_name}
+              </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span>Email</span>
-              <span>{event.target_name}</span>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">Email</span>
+              <span className="font-semibold text-gray-800">
+                {event.target_name}
+              </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span>ID</span>
-              <span>{event.actor_id}</span>
-            </div>
-          </div>
-          {/* Actions */}
-          <div>
-            <h2 className="card-title">ACTIONS</h2>
-            <div className="flex items-center justify-between">
-              <span>Name</span>
-              <span>{event.action.name}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>Object</span>
-              <span>{event.action.object}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span>ID</span>
-              <span>{event.action.id}</span>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">ID</span>
+              <span className="font-semibold text-gray-800">
+                {event.actor_id}
+              </span>
             </div>
           </div>
+
+          {/* Action */}
+          <div className="mt-1">
+            <h2 className="font-bold text-gray-500">ACTION</h2>
+            <div className="flex justify-between mt-2">
+              <span className="font-semibold text-gray-400">Name</span>
+              <span className="font-semibold text-gray-800">
+                {event.action.name}
+              </span>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">Object</span>
+              <span className="font-semibold text-gray-800">
+                {event.action.object}
+              </span>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">ID</span>
+              <span className="font-semibold text-gray-800">
+                {event.action.id}
+              </span>
+            </div>
+          </div>
+
           {/* Date */}
-          <div>
-            <h2 className="card-title">DATE</h2>
-            <div className="flex items-center justify-between">
-              <span>Readable</span>
-              <span>{formatDate(event.occurred_at)}</span>
+          <div className="mt-1">
+            <h2 className="font-bold text-gray-500">DATE</h2>
+            <div className="flex justify-between mt-2">
+              <span className="font-semibold text-gray-400">Readable</span>
+              <span className="font-semibold text-gray-800">
+                {formatDate(event.occurred_at)}
+              </span>
             </div>
           </div>
-        </div>
-        <div className="flex justify-between">
+
           {/* Metadata */}
-          <div>
-            <h2 className="card-title">METADATA</h2>
-            <div className="flex items-center justify-between">
-              <span>Description</span>
-              <span>{event.metadata.description}</span>
+          <div className="mt-5">
+            <h2 className="font-bold text-gray-500">METADATA</h2>
+            <div className="flex justify-between mt-2">
+              <span className="font-semibold text-gray-400">Description</span>
+              <span className="font-semibold text-gray-800">
+                {event.metadata?.description}
+              </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span>Redirect</span>
-              <span>{event.metadata.redirect}</span>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">Redirect</span>
+              <span className="font-semibold text-gray-800">
+                {event.metadata?.redirect}
+              </span>
+            </div>
+          </div>
+
+          {/* Target */}
+          <div className="mt-5">
+            <h2 className="font-bold text-gray-500">TARGET</h2>
+            <div className="flex justify-between mt-2">
+              <span className="font-semibold text-gray-400">ID</span>
+              <span className="font-semibold text-gray-800">
+                {event.target_id}
+              </span>
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="font-semibold text-gray-400">Name</span>
+              <span className="font-semibold text-gray-800">
+                {event.target_name}
+              </span>
             </div>
           </div>
         </div>

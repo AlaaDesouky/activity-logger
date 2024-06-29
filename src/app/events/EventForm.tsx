@@ -171,7 +171,7 @@ export default function EventForm({
         <div className="form-control w-full">
           <button
             type="submit"
-            className="btn btn-primary w-full"
+            className="btn btn-neutral-content w-full"
             disabled={isDisabled}
           >
             Submit

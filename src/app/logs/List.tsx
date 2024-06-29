@@ -6,7 +6,7 @@ import Filters from "./Filters";
 import { GetEventsQuery } from "../types/event";
 
 export default function List() {
-  const [query, setQuery] = useState<GetEventsQuery>({ limit: 10 });
+  const [query, setQuery] = useState<GetEventsQuery>({ limit: 5 });
 
   const { data, isLoading, setSize, size } = useEvents(query);
 
@@ -30,26 +30,32 @@ export default function List() {
   };
 
   return (
-    <div className="overflow-x-auto container w-full">
+    <div className="overflow-x-auto container w-full border p-2 rounded-lg bg-gray-100">
       <Filters
         onSearch={handleSearch}
         onFilter={handleFilter}
         onExport={handleExport}
         onLive={handleLive}
       />
-      <table className="table table-lg table-pin-rows bg-neutral w-full">
+      <table className="table table-lg table-pin-rows w-full">
         {/* head */}
         <thead>
-          <tr>
-            <th>Actor</th>
-            <th>Action</th>
-            <th>Date</th>
+          <tr className="bg-gray-100">
+            <th>
+              <h2 className="font-bold text-gray-500 text-xl">ACTOR</h2>
+            </th>
+            <th>
+              <h2 className="font-bold text-gray-500 text-xl">ACTIONS</h2>
+            </th>
+            <th>
+              <h2 className="font-bold text-gray-500 text-xl">DATE</h2>
+            </th>
             <th></th>
           </tr>
         </thead>
 
         {/* body */}
-        <tbody>
+        <tbody className="bg-white">
           {isLoading && (
             <tr>
               <th colSpan={4}>
@@ -64,14 +70,14 @@ export default function List() {
           })}
           {/* Load More */}
           {!isLoading && (
-            <tr>
+            <tr className="bg-gray-100">
               <th colSpan={4}>
                 {data && data[0].length != 0 ? (
                   <button
                     onClick={() => setSize(size + 1)}
-                    className="btn btn-block"
+                    className="btn btn-block btn-ghost text-xl"
                   >
-                    Load More
+                    LOAD MORE
                   </button>
                 ) : (
                   <span>No data found</span>

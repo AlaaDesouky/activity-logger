@@ -17,7 +17,7 @@ export default function EventItem({ event }: { event: Event }) {
         <th>
           <div className="flex items-center gap-3">
             <div className="avatar placeholder">
-              <div className="bg-neutral text-neutral-content w-8 rounded-full">
+              <div className="bg-neutral-content text-natural-content w-8 rounded-full">
                 <span className="text-xs">{event.actor_name[0]}</span>
               </div>
             </div>
