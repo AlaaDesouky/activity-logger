@@ -1,9 +1,3 @@
-export interface EventMetaData {
-  redirect: string;
-  description: string;
-  x_request_id: string;
-}
-
 export interface EventAction {
   id: string;
   object: string;
@@ -31,7 +25,7 @@ export interface Event {
   location: string;
   occurred_at: string;
   action: EventAction;
-  metadata: EventMetaData;
+  metadata: any;
 }
 
 export interface CreateEventPayload {
@@ -42,4 +36,9 @@ export interface CreateEventPayload {
   location: string;
   object: string;
   metadata?: any;
+}
+
+export interface GetEventsQuery {
+  limit?: number;
+  search?: string;
 }

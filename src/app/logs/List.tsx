@@ -1,13 +1,20 @@
+import { useState } from "react";
 import Loader from "../components/Loader";
 import { useEvents } from "../services/queries";
 import EventItem from "./EventItem";
 import Filters from "./Filters";
+import { GetEventsQuery } from "../types/event";
 
 export default function List() {
-  const { data, isLoading, setSize, size } = useEvents();
+  const [query, setQuery] = useState<GetEventsQuery>({ limit: 10 });
 
+  const { data, isLoading, setSize, size } = useEvents(query);
+
+  /**
+   * @TODO add debounce logic
+   */
   const handleSearch = (value: string) => {
-    console.log(value);
+    setQuery((prev) => ({ ...prev, search: value }));
   };
 
   const handleFilter = (filter: string) => {
@@ -21,8 +28,6 @@ export default function List() {
   const handleLive = () => {
     console.log("Live clicked");
   };
-
-  if (isLoading) return <Loader />;
 
   return (
     <div className="overflow-x-auto container w-full">
@@ -45,21 +50,35 @@ export default function List() {
 
         {/* body */}
         <tbody>
+          {isLoading && (
+            <tr>
+              <th colSpan={4}>
+                <Loader />
+              </th>
+            </tr>
+          )}
           {data?.map((events) => {
             return events.map((event) => (
               <EventItem key={event.id} event={event} />
             ));
           })}
-          <tr>
-            <th colSpan={4}>
-              <button
-                onClick={() => setSize(size + 1)}
-                className="btn btn-block"
-              >
-                Load More
-              </button>
-            </th>
-          </tr>
+          {/* Load More */}
+          {!isLoading && (
+            <tr>
+              <th colSpan={4}>
+                {data && data[0].length != 0 ? (
+                  <button
+                    onClick={() => setSize(size + 1)}
+                    className="btn btn-block"
+                  >
+                    Load More
+                  </button>
+                ) : (
+                  <span>No data found</span>
+                )}
+              </th>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>

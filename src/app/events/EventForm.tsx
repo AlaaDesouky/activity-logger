@@ -21,14 +21,18 @@ export default function EventForm({
   isDisabled,
   onSubmit,
 }: EventFormProps) {
-  const [formData, setFormData] = useState<CreateEventPayload>({
+  const originalFormState: CreateEventPayload = {
     actor_id: "",
     action_id: "",
     target_id: "",
     location: "",
     object: "",
     group: "",
-  });
+  };
+  const [formData, setFormData] =
+    useState<CreateEventPayload>(originalFormState);
+
+  const [isCreated, setIsCreated] = useState<boolean>(false);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -40,127 +44,140 @@ export default function EventForm({
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(formData);
+    setFormData(() => originalFormState);
+    setIsCreated(true);
+
+    setTimeout(() => {
+      setIsCreated(false);
+    }, 3000);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Actor</span>
-        </label>
-        <select
-          name="actor_id"
-          value={formData.actor_id}
-          onChange={handleChange}
-          className="select select-bordered w-full"
-          required
-        >
-          <option value="" disabled>
-            Select Actor
-          </option>
-          {actors.map((actor) => (
-            <option key={actor.id} value={actor.id}>
-              {actor.name}
+    <>
+      {isCreated && (
+        <div role="alert" className="alert alert-success">
+          <span>Event is created!</span>
+        </div>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Actor</span>
+          </label>
+          <select
+            name="actor_id"
+            value={formData.actor_id}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+          >
+            <option value="" disabled>
+              Select Actor
             </option>
-          ))}
-        </select>
-      </div>
+            {actors.map((actor) => (
+              <option key={actor.id} value={actor.id}>
+                {actor.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Action</span>
-        </label>
-        <select
-          name="action_id"
-          value={formData.action_id}
-          onChange={handleChange}
-          className="select select-bordered w-full"
-          required
-        >
-          <option value="" disabled>
-            Select Action
-          </option>
-          {actions.map((action) => (
-            <option key={action.id} value={action.id}>
-              {action.name}
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Action</span>
+          </label>
+          <select
+            name="action_id"
+            value={formData.action_id}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+          >
+            <option value="" disabled>
+              Select Action
             </option>
-          ))}
-        </select>
-      </div>
+            {actions.map((action) => (
+              <option key={action.id} value={action.id}>
+                {action.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Target</span>
-        </label>
-        <select
-          name="target_id"
-          value={formData.target_id}
-          onChange={handleChange}
-          className="select select-bordered w-full"
-          required
-        >
-          <option value="" disabled>
-            Select Target
-          </option>
-          {targets.map((target) => (
-            <option key={target.id} value={target.id}>
-              {target.name}
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Target</span>
+          </label>
+          <select
+            name="target_id"
+            value={formData.target_id}
+            onChange={handleChange}
+            className="select select-bordered w-full"
+            required
+          >
+            <option value="" disabled>
+              Select Target
             </option>
-          ))}
-        </select>
-      </div>
+            {targets.map((target) => (
+              <option key={target.id} value={target.id}>
+                {target.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Location</span>
-        </label>
-        <input
-          type="text"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Location</span>
+          </label>
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
 
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Object</span>
-        </label>
-        <input
-          type="text"
-          name="object"
-          value={formData.object}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Object</span>
+          </label>
+          <input
+            type="text"
+            name="object"
+            value={formData.object}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
 
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">Group</span>
-        </label>
-        <input
-          type="text"
-          name="group"
-          value={formData.group}
-          onChange={handleChange}
-          className="input input-bordered w-full"
-          required
-        />
-      </div>
+        <div className="form-control w-full">
+          <label className="label">
+            <span className="label-text">Group</span>
+          </label>
+          <input
+            type="text"
+            name="group"
+            value={formData.group}
+            onChange={handleChange}
+            className="input input-bordered w-full"
+            required
+          />
+        </div>
 
-      <div className="form-control w-full">
-        <button
-          type="submit"
-          className="btn btn-primary w-full"
-          disabled={isDisabled}
-        >
-          Submit
-        </button>
-      </div>
-    </form>
+        <div className="form-control w-full">
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={isDisabled}
+          >
+            Submit
+          </button>
+        </div>
+      </form>
+    </>
   );
 }

@@ -3,7 +3,7 @@ import { useEvents } from "./queries";
 import { createEvent } from "./api";
 
 export function useCreateEvent() {
-  const { mutate } = useEvents();
+  const { mutate } = useEvents({ limit: 10 });
 
   return useSWRMutation("/event", createEvent, {
     onError() {

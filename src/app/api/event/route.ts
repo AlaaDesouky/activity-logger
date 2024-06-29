@@ -2,93 +2,77 @@ import { CreateEventPayload, Event } from "@/app/types/event";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../../../lib/db";
 
-export async function GET() {
-  const events: Event[] = [
-    {
-      id: "evt_15B56WILKW5K",
-      object: "event",
-      actor_id: "user_3VG74289PUA2",
-      actor_name: "Ali Salah",
-      group: "instatus.com",
-      action: {
-        id: "evt_action_PGTD81NCAOQ2",
-        object: "event_action",
-        name: "user.login_succeeded",
+interface Filter {
+  OR?: any[];
+}
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+
+  const page: number = Number(searchParams.get("page"));
+  const limit: number = Number(searchParams.get("limit"));
+
+  const search: string | null = searchParams.get("search");
+
+  let filter: Filter = {};
+
+  if (search) {
+    filter["OR"] = [
+      {
+        actor: {
+          OR: [{ name: { contains: search || "" } }],
+        },
       },
-      target_id: "user_DOKVD1U3L030",
-      target_name: "ali@instatus.com",
-      location: "105.40.62.95",
-      occurred_at: "2022-01-05T14:31:13.607Z",
-      metadata: {
-        redirect: "/setup",
-        description: "User login succeeded.",
-        x_request_id: "req_W1Y13QOHMI5H",
+      {
+        action: {
+          OR: [{ name: { contains: search || "" } }],
+        },
       },
+      {
+        target: {
+          OR: [{ name: { contains: search || "" } }],
+        },
+      },
+    ];
+  }
+
+  const take = limit || 1;
+  const skip = page ? (page - 1) * take : 0;
+
+  const data = await db.event.findMany({
+    where: filter,
+    include: {
+      actor: true,
+      action: true,
+      target: true,
     },
-    {
-      id: "evt_16B56WILKW5K",
-      object: "event",
-      actor_id: "user_3VG74289PUA2",
-      actor_name: "Ali Salah",
-      group: "instatus.com",
+    take,
+    skip,
+  });
+
+  /**
+   * @TODO create a generalized mapper utility
+   */
+  const events: Event[] = data.map((event) => {
+    const mappedData: Event = {
+      id: event.id,
+      object: event.object,
+      actor_id: event.actor.id,
+      actor_name: event.actor.name,
+      group: event.group,
       action: {
-        id: "evt_action_PGTD81NCAOQ2",
-        object: "event_action",
-        name: "user.login_succeeded",
+        id: event.action.id,
+        name: event.action.name,
+        object: event.action.object,
       },
-      target_id: "user_DOKVD1U3L030",
-      target_name: "ali@instatus.com",
-      location: "105.40.62.95",
-      occurred_at: "2022-01-05T14:31:13.607Z",
-      metadata: {
-        redirect: "/setup",
-        description: "User login succeeded.",
-        x_request_id: "req_W1Y13QOHMI5H",
-      },
-    },
-    {
-      id: "evt_17B56WILKW5K",
-      object: "event",
-      actor_id: "user_3VG74289PUA2",
-      actor_name: "Ali Salah",
-      group: "instatus.com",
-      action: {
-        id: "evt_action_PGTD81NCAOQ2",
-        object: "event_action",
-        name: "user.login_succeeded",
-      },
-      target_id: "user_DOKVD1U3L030",
-      target_name: "ali@instatus.com",
-      location: "105.40.62.95",
-      occurred_at: "2022-01-05T14:31:13.607Z",
-      metadata: {
-        redirect: "/setup",
-        description: "User login succeeded.",
-        x_request_id: "req_W1Y13QOHMI5H",
-      },
-    },
-    {
-      id: "evt_18B56WILKW5K",
-      object: "event",
-      actor_id: "user_3VG74289PUA2",
-      actor_name: "Ali Salah",
-      group: "instatus.com",
-      action: {
-        id: "evt_action_PGTD81NCAOQ2",
-        object: "event_action",
-        name: "user.login_succeeded",
-      },
-      target_id: "user_DOKVD1U3L030",
-      target_name: "ali@instatus.com",
-      location: "105.40.62.95",
-      occurred_at: "2022-01-05T14:31:13.607Z",
-      metadata: {
-        redirect: "/setup",
-        description: "User login succeeded.",
-        x_request_id: "req_W1Y13QOHMI5H",
-      },
-    },
-  ];
+      target_id: event.target.id,
+      target_name: event.target.name,
+      location: event.location,
+      occurred_at: event.occurredAt.toISOString(),
+      metadata: event.metadata,
+    };
+    return mappedData;
+  });
 
   try {
     return NextResponse.json<Event[]>(events, { status: 200 });
