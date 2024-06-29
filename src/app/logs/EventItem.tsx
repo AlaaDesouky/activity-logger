@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Event } from "../types/event";
-import { formatDate } from "@/utils/dateHelper";
+import { formatDate } from "@/app/utils/dateHelper";
 import EventItemDetails from "./EventItemDetails";
 
 export default function EventItem({ event }: { event: Event }) {

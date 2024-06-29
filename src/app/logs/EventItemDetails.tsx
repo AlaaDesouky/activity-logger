@@ -1,5 +1,5 @@
 import { Event } from "../types/event";
-import { formatDate } from "@/utils/dateHelper";
+import { formatDate } from "@/app/utils/dateHelper";
 
 export default function EventItemDetails({ event }: { event: Event }) {
   return (
